@@ -37,6 +37,7 @@ struct ContentView: View {
                             .shadow(color: .black, radius: 2)
                     }
                 }
+                // goal #2 to show score
                 Text("Your score is \(userScore)")
                     .foregroundColor(.white)
                 Spacer()
@@ -49,7 +50,11 @@ struct ContentView: View {
         }
     }
     
+    
+    /// checks the answer
+    /// - Parameter myAnswer: the index of the array the user selected
     func evaluateFlag(myAnswer : Int) {
+        // goal #1 to modify score
         if myAnswer == correctAnswer {
             scoreTitle = "You got it right"
             userScore += 1
@@ -57,6 +62,7 @@ struct ContentView: View {
         } else {
             scoreTitle = "You got it wrong!"
             userScore -= 1
+            // goal #3 show what they actually selected
             scoreMessage = "That's the flag for \(countries[myAnswer])."
         }
 
