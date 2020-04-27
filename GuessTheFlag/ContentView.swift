@@ -8,6 +8,20 @@
 
 import SwiftUI
 
+// Day 24 - challenge 3.
+// Go back to project 2 and create a FlagImage() view that renders one flag image using the specific set of modifiers we had.
+struct SomeFlag : View {
+    let flagImageName : String
+    
+    var body : some View {
+        Image(flagImageName)
+            .renderingMode(.original)
+            .clipShape(Capsule())
+            .overlay(Capsule().stroke(Color.black, lineWidth: 1))
+            .shadow(color: .black, radius: 2)
+    }
+}
+
 struct ContentView: View {
     @State private var countries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Nigeria", "Poland", "Russia", "Spain", "UK", "US"].shuffled()
     @State private var correctAnswer = Int.random(in: 0...2)
@@ -31,10 +45,11 @@ struct ContentView: View {
                     Button(action: {
                         self.evaluateFlag(myAnswer: number)
                     }) {
-                        Image(self.countries[number]).renderingMode(.original)
-                            .clipShape(Capsule())
-                            .overlay(Capsule().stroke(Color.black, lineWidth: 1))
-                            .shadow(color: .black, radius: 2)
+                        SomeFlag(flagImageName: self.countries[number])
+//                        Image(self.countries[number]).renderingMode(.original)
+//                            .clipShape(Capsule())
+//                            .overlay(Capsule().stroke(Color.black, lineWidth: 1))
+//                            .shadow(color: .black, radius: 2)
                     }
                 }
                 // goal #2 to show score
