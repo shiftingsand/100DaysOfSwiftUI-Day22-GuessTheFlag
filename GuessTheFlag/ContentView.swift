@@ -31,6 +31,7 @@ struct ContentView: View {
     @State private var userScore = 0
     @State private var opacityValue : Double = 1.0
     @State private var rotationAmount : Double = 0
+    @State private var scaleAmount : CGFloat = 1.0
     var message = ""
     var body: some View {
         ZStack {
@@ -49,8 +50,10 @@ struct ContentView: View {
                         withAnimation {
                             if true == self.evaluateFlag(myAnswer: number) {
                                 self.rotationAmount = 360
+                                self.scaleAmount = 1
                             } else {
                                 self.rotationAmount = 0
+                                self.scaleAmount = 2
                             }
                         }
                     }) {
@@ -58,6 +61,7 @@ struct ContentView: View {
                     }
                     .opacity(number == self.correctAnswer ? 1 : self.opacityValue)
                     .rotation3DEffect(.degrees(number == self.correctAnswer ? self.rotationAmount : 0), axis: (x: 0, y: 1, z: 0))
+                    .scaleEffect(number == self.correctAnswer ? self.scaleAmount : 1)
                     .animation(.default)
                 }
                 // goal #2 to show score
@@ -101,6 +105,7 @@ struct ContentView: View {
         correctAnswer = Int.random(in: 0...2)
         opacityValue = 1
         rotationAmount = 0
+        scaleAmount = 1.0
     }
 }
 
