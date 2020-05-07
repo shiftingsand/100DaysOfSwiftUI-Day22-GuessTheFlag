@@ -29,6 +29,8 @@ struct ContentView: View {
     @State private var scoreTitle = ""
     @State private var scoreMessage = ""
     @State private var userScore = 0
+    @State private var opacityValue : Double = 1.0
+    @State private var rotationAmount : Double = 0
     var message = ""
     var body: some View {
         ZStack {
@@ -43,14 +45,20 @@ struct ContentView: View {
                 }
                 ForEach (0..<3) { number in
                     Button(action: {
-                        self.evaluateFlag(myAnswer: number)
+                        self.opacityValue = 0.25
+                        withAnimation {
+                            if true == self.evaluateFlag(myAnswer: number) {
+                                self.rotationAmount = 360
+                            } else {
+                                self.rotationAmount = 0
+                            }
+                        }
                     }) {
                         SomeFlag(flagImageName: self.countries[number])
-//                        Image(self.countries[number]).renderingMode(.original)
-//                            .clipShape(Capsule())
-//                            .overlay(Capsule().stroke(Color.black, lineWidth: 1))
-//                            .shadow(color: .black, radius: 2)
                     }
+                    .opacity(number == self.correctAnswer ? 1 : self.opacityValue)
+                    .rotation3DEffect(.degrees(number == self.correctAnswer ? self.rotationAmount : 0), axis: (x: 0, y: 1, z: 0))
+                    .animation(.default)
                 }
                 // goal #2 to show score
                 Text("Your score is \(userScore)")
@@ -68,12 +76,15 @@ struct ContentView: View {
     
     /// checks the answer
     /// - Parameter myAnswer: the index of the array the user selected
-    func evaluateFlag(myAnswer : Int) {
+    func evaluateFlag(myAnswer : Int) -> Bool {
+        var rc = false
+        
         // goal #1 to modify score
         if myAnswer == correctAnswer {
             scoreTitle = "You got it right"
             userScore += 1
             scoreMessage = ""
+            rc = true
         } else {
             scoreTitle = "You got it wrong!"
             userScore -= 1
@@ -82,11 +93,14 @@ struct ContentView: View {
         }
 
         showingScore = true
+        return rc
     }
     
     func askQuestion() {
         countries.shuffle()
         correctAnswer = Int.random(in: 0...2)
+        opacityValue = 1
+        rotationAmount = 0
     }
 }
 
